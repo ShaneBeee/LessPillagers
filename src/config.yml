@@ -1,0 +1,6 @@
+#LESS PILLAGERS
+#By ShaneBee
+
+settings:
+  # The max pillagers to spawn around each other (generally around an outpost)
+  max-pillagers-per-outpost: 16

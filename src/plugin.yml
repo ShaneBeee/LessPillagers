@@ -1,0 +1,14 @@
+main: tk.shanebee.lesspillagers.LessPillagers
+name: LessPillagers
+version: 1.0.0
+api-version: 1.14
+author: ShaneBee
+
+commands:
+  pillager-count:
+    description: Test for pillagers
+    permission: lesspillagers.command.count
+
+permissions:
+  lesspillagers.command.count:
+    default: op
