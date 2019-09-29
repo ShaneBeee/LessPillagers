@@ -15,89 +15,89 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class LessPillagers extends JavaPlugin implements Listener {
-  private int MAX_PILLAGERS, RADIUS_X, RADIUS_Y, RADIUS_Z;
+	private int MAX_PILLAGERS, RADIUS_X, RADIUS_Y, RADIUS_Z;
 
-  // -- JavaPlugin methods --------------------------------------------------------------------------------------------
+	// -- JavaPlugin methods --------------------------------------------------------------------------------------------
 
-  @Override
-  public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-    switch (command.getName().toLowerCase()) {
-      case "pillager-count":
-        if (sender instanceof Player) {
-          Player player = ((Player) sender);
-          player.sendMessage("Pillagers: " + nearby(player));
-        }
-        else
-          sender.sendMessage("Don't worry console, you're safe: No pillagers near you!");
+	@Override
+	public void onEnable() {
+		reloadConfig();
 
-        return true;
+		this.getServer().getPluginManager().registerEvents(this, this);
+	}
 
-      case "pillager-reload":
-        reloadConfig();
-        if (sender instanceof Player) sender.sendMessage("Configuration reloaded.");
-        return true;
-    }
+	@Override
+	public void onDisable() {
+		super.onDisable();
+		// Maybe not necessary, but to be sure unloading all event listeners (especially for plugman reload for example)
+		HandlerList.unregisterAll((JavaPlugin) this);
+	}
 
-    return super.onCommand(sender, command, label, args);
+	@Override
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+		switch (command.getName().toLowerCase()) {
+			case "pillager-count":
+				if (sender instanceof Player) {
+					Player player = ((Player) sender);
+					player.sendMessage("Pillagers: " + nearby(player));
+				}
+				else
+					sender.sendMessage("Don't worry console, you're safe: No pillagers near you!");
 
-  }
+				return true;
 
-  @Override
-  public void onDisable() {
-    super.onDisable();
-    // Maybe not necessary, but to be sure unloading all event listeners (especially for plugman reload for example)
-    HandlerList.unregisterAll((JavaPlugin) this);
-  }
+			case "pillager-reload":
+				reloadConfig();
+				if (sender instanceof Player) sender.sendMessage("Configuration reloaded.");
+				return true;
+		}
 
-  @Override
-  public void onEnable() {
-    reloadConfig();
+		return super.onCommand(sender, command, label, args);
 
-    this.getServer().getPluginManager().registerEvents(this, this);
-  }
+	}
 
-  @Override
-  public void reloadConfig() {
-    super.reloadConfig();
+	@Override
+	public void reloadConfig() {
+		super.reloadConfig();
 
-    log("Loading config...");
-    saveDefaultConfig();
-    getConfig().options().copyDefaults(true);
-    saveConfig();
-    log("&aLoaded successfully");
+		log("Loading config...");
+		saveDefaultConfig();
+		getConfig().options().copyDefaults(true);
+		saveConfig();
+		log("&aLoaded successfully");
 
-    ConfigurationSection settings = getConfig().getConfigurationSection("settings");
+		ConfigurationSection settings = getConfig().getConfigurationSection("settings");
 
-    MAX_PILLAGERS = settings.getInt("max-pillagers-per-outpost");
-    RADIUS_X      = Math.max(settings.getInt("pillagers-check-radius.x"), 1);
-    RADIUS_Y      = Math.max(settings.getInt("pillagers-check-radius.y"), 1);
-    RADIUS_Z      = Math.max(settings.getInt("pillagers-check-radius.z"), 1);
+		MAX_PILLAGERS	= settings.getInt("max-pillagers-per-outpost");
+		RADIUS_X		= Math.max(settings.getInt("pillagers-check-radius.x"), 1);
+		RADIUS_Y		= Math.max(settings.getInt("pillagers-check-radius.y"), 1);
+		RADIUS_Z		= Math.max(settings.getInt("pillagers-check-radius.z"), 1);
 
-    log("Max Pillagers = " + MAX_PILLAGERS + "\tRadius: X=" + RADIUS_X + " / Y=" + RADIUS_Y + " / Z=" + RADIUS_Z);
-  }
+		log("Max Pillagers = " + MAX_PILLAGERS + "\tRadius: X=" + RADIUS_X + " / Y=" + RADIUS_Y + " / Z=" + RADIUS_Z);
+	}
 
-  // -- Listener methods ----------------------------------------------------------------------------------------------
+	// -- Listener methods ----------------------------------------------------------------------------------------------
 
-  @EventHandler
-  private void onPillagerSpawn(CreatureSpawnEvent event) {
-    if (!event.isCancelled() && event.getEntityType() == EntityType.PILLAGER
-        && nearby(event.getEntity()) >= MAX_PILLAGERS)
-      event.setCancelled(true);
-  }
+	@EventHandler
+	private void onPillagerSpawn(CreatureSpawnEvent event) {
+		if (!event.isCancelled() && event.getEntityType() == EntityType.PILLAGER
+				&& nearby(event.getEntity()) >= MAX_PILLAGERS)
+			event.setCancelled(true);
+	}
 
-  // -- Custom methods ------------------------------------------------------------------------------------------------
+	// -- Custom methods ------------------------------------------------------------------------------------------------
 
-  private void log(String message) {
-    Bukkit.getConsoleSender().sendMessage(
-        ChatColor.translateAlternateColorCodes('&', "&7[&3LessPillagers&7] " + message));
-  }
+	private void log(String message) {
+		Bukkit.getConsoleSender().sendMessage(
+				ChatColor.translateAlternateColorCodes('&', "&7[&3LessPillagers&7] " + message));
+	}
 
-  private int nearby(Entity entity) {
-    int pillager = 0;
+	private int nearby(Entity entity) {
+		int pillager = 0;
 
-    for (Entity e : entity.getNearbyEntities(RADIUS_X, RADIUS_Y, RADIUS_Z))
-      if (e.getType() == EntityType.PILLAGER) pillager++;
+		for (Entity e : entity.getNearbyEntities(RADIUS_X, RADIUS_Y, RADIUS_Z))
+			if (e.getType() == EntityType.PILLAGER) pillager++;
 
-    return pillager;
-  }
+		return pillager;
+	}
 }
