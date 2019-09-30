@@ -1,14 +1,24 @@
 main: tk.shanebee.lesspillagers.LessPillagers
 name: LessPillagers
-version: 1.0.0
+version: 1.0.1
 api-version: 1.14
 author: ShaneBee
+contributors: [ arboriginal ]
+website: https://www.spigotmc.org/resources/lesspillagers.70184/
+dev-url: https://github.com/ShaneBeee/LessPillagers/
 
 commands:
   pillager-count:
     description: Test for pillagers
     permission: lesspillagers.command.count
 
+  pillager-reload:
+    description: Reload plugin configuration
+    permission: lesspillagers.command.reload
+
 permissions:
   lesspillagers.command.count:
+    default: op
+
+  lesspillagers.command.reload:
     default: op
