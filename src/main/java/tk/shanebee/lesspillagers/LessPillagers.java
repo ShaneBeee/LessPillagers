@@ -23,6 +23,7 @@ public class LessPillagers extends JavaPlugin implements Listener {
 		reloadConfig();
 
 		this.getServer().getPluginManager().registerEvents(this, this);
+        log("&aLoaded successfully");
 	}
 
 	@Override
@@ -63,7 +64,6 @@ public class LessPillagers extends JavaPlugin implements Listener {
 		saveDefaultConfig();
 		getConfig().options().copyDefaults(true);
 		saveConfig();
-		log("&aLoaded successfully");
 
 		ConfigurationSection settings = getConfig().getConfigurationSection("settings");
 
@@ -72,13 +72,13 @@ public class LessPillagers extends JavaPlugin implements Listener {
 		RADIUS_Y = Math.max(settings.getInt("pillagers-check-radius.y"), 1);
 		RADIUS_Z = Math.max(settings.getInt("pillagers-check-radius.z"), 1);
 
-		log("Max Pillagers = " + MAX_PILLAGERS + "\tRadius: X=" + RADIUS_X + " / Y=" + RADIUS_Y + " / Z=" + RADIUS_Z);
+		log("Max Pillagers: " + MAX_PILLAGERS);
+		log("Radius: X=" + RADIUS_X + " / Y=" + RADIUS_Y + " / Z=" + RADIUS_Z);
 	}
 
 	@EventHandler
 	private void onPillagerSpawn(CreatureSpawnEvent event) {
-		if (!event.isCancelled() && event.getEntityType() == EntityType.PILLAGER
-				&& nearby(event.getEntity()) >= MAX_PILLAGERS)
+		if (!event.isCancelled() && event.getEntityType() == EntityType.PILLAGER && nearby(event.getEntity()) >= MAX_PILLAGERS)
 			event.setCancelled(true);
 	}
 
