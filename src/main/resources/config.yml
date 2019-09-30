@@ -1,0 +1,21 @@
+# LESS PILLAGERS configuration file
+# .
+# Author: ShaneBee - https://shanebeestudios.tk/
+# Official plugin page: https://www.spigotmc.org/resources/lesspillagers.70184/
+# .
+# Get the last config.yml file with details of its parameters here:
+# https://github.com/ShaneBeee/LessPillagers/blob/master/src/config.yml
+# .
+# settings.max-pillagers-per-outpost:
+#   Max pillagers to spawn around each other (generally around an outpost)
+# .
+# settings.pillagers-check-radius:
+#   Radius (in blocks), for each direction, used to count nearby pillagers
+#   (Tips: Using a lower value in Y axis will return less entities to check by the plugin)
+
+settings:
+  max-pillagers-per-outpost: 16
+  pillagers-check-radius:
+    x: 100
+    y: 10
+    z: 100
